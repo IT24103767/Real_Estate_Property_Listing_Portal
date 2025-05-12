@@ -1,5 +1,3 @@
-package com.example.real_estate_property_listing_portal;
-
 public class QuickSortProperties {
     public static void quickSort(Property[] properties, int low, int high) {
         if (low < high) {
