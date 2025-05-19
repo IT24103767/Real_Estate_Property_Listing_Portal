@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard - RealPoint Properties</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #3498db;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links li a {
+            font-weight: 500;
+            transition: color 0.3s;
+            text-decoration: none;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links li a i {
+            font-size: 1.1rem;
+        }
+
+        .nav-links li a:hover {
+            color: #3498db;
+        }
+
+        .nav-links li a.active {
+            color: #3498db;
+        }
+
+        /* Dashboard Content */
+        .dashboard {
+            padding-top: 80px;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            background: #3498db;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-picture i {
+            font-size: 60px;
+            color: #fff;
+        }
+
+        .profile-info h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .profile-info p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .profile-actions a {
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .edit-profile {
+            background: #3498db;
+            color: #fff;
+        }
+
+        .edit-profile:hover {
+            background: #2980b9;
+        }
+
+        .sign-out {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .sign-out:hover {
+            background: #c0392b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-card {
+                margin: 20px;
+            }
+        }
+
+        .danger-zone {
+            margin-top: 40px;
+            padding: 20px;
+            border: 1px solid #dc3545;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .danger-zone h3 {
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+
+        .btn-delete-account {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-delete-account:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">Real<span>Point</span></a>
+            <ul class="nav-links">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/buy"><i class="fas fa-search"></i> Buy</a></li>
+                <li><a href="/sell"><i class="fas fa-tag"></i> Sell</a></li>
+                <!-- Show dashboard link when logged in -->
+                <li th:if="${session.email != null}">
+                    <a href="/dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard">
+        <div class="profile-card">
+            <div class="profile-picture">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-info">
+                <h2 th:text="${user != null ? user.username : session.email}">Username</h2>
+                <p th:text="${session.email}">user@example.com</p>
+            </div>
+            <div class="profile-actions">
+                <a href="/profile" class="edit-profile"><i class="fas fa-edit"></i> Edit Profile</a>
+                <a href="/logout" class="sign-out"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+            </div>
+
+            <!-- Danger Zone inside profile card -->
+            <div class="danger-zone">
+                <h3>Danger Zone</h3>
+                <p>Once you delete your account, there is no going back. Please be certain.</p>
+                <form th:action="@{/delete-account}" method="post" style="margin-top: 15px;">
+                    <button type="submit" class="btn-delete-account" 
+                            onclick="return confirm('Are you sure you want to delete your account? This will also delete all your properties and cannot be undone.')">
+                        <i class="fas fa-trash"></i> Delete Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
