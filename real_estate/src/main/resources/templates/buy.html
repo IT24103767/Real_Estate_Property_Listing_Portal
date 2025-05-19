@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RealPoint Properties - Buy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #3498db;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links li a {
+            font-weight: 500;
+            transition: color 0.3s;
+            text-decoration: none;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links li a i {
+            font-size: 1.1rem;
+        }
+
+        .nav-links li a:hover {
+            color: #3498db;
+        }
+
+        .nav-links li a.active {
+            color: #3498db;
+        }
+
+        .auth-buttons a {
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .login-btn {
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+
+        .login-btn:hover {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        .signup-btn {
+            background-color: #3498db;
+            color: #fff !important;
+            margin-left: 10px;
+        }
+
+        .signup-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .buy-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+            url('/home.jpeg') no-repeat center center/cover;
+            height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 40px;
+            padding-top: 60px;
+        }
+
+        .buy-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .filter-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-group {
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .property-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .property-image {
+            height: 200px;
+            background-color: #f0f0f0;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: url('/default-property.jpg');
+        }
+
+        .property-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #3498db;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .property-details {
+            padding: 20px;
+        }
+
+        .property-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .property-location {
+            display: flex;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .property-location i {
+            margin-right: 5px;
+        }
+
+        .property-price {
+            font-size: 1.4rem;
+            color: #3498db;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .property-info {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .no-properties {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .property-actions {
+            margin-top: 10px;
+        }
+
+        .btn-add-cart {
+            padding: 8px 20px;
+            border: none;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-add-cart:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-add-cart:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .cart-count {
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="container nav-container">
+        <a href="/" class="logo">Real<span>Point</span></a>
+        <ul class="nav-links">
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/buy" class="active"><i class="fas fa-search"></i> Buy</a></li>
+            <li><a href="/sell"><i class="fas fa-tag"></i> Sell</a></li>
+            <li th:if="${session.email != null}">
+                <a href="/cart">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                    <span th:if="${session.cart != null and session.cart.itemCount > 0}"
+                          class="cart-count"
+                          th:text="${session.cart.itemCount}">0</span>
+                </a>
+            </li>
+            <li th:if="${session.email == null}" class="auth-buttons">
+                <a href="/login" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/register" class="signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </li>
+            <li th:if="${session.email != null}">
+                <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<header class="buy-header">
+    <div class="container">
+        <h1>Find Your Dream Property</h1>
+        <p>Browse through our extensive collection of properties</p>
+    </div>
+</header>
+
+<main class="container">
+    <section class="filter-section">
+        <form class="filter-form" action="/buy" method="get">
+            <div class="form-group">
+                <label for="propertyType">Property Type</label>
+                <select id="propertyType" name="propertyType">
+                    <option value="all" th:selected="${selectedPropertyType == null || selectedPropertyType == 'all'}">All Properties</option>
+                    <option th:each="type : ${propertyTypes}"
+                            th:value="${type}"
+                            th:text="${#strings.capitalize(type)}"
+                            th:selected="${type == selectedPropertyType}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="priceSort">Sort by Price</label>
+                <select id="priceSort" name="priceSort">
+                    <option value="none" th:selected="${selectedPriceSort == null || selectedPriceSort == 'none'}">No Sort</option>
+                    <option value="asc" th:selected="${selectedPriceSort == 'asc'}">Price: Low to High</option>
+                    <option value="desc" th:selected="${selectedPriceSort == 'desc'}">Price: High to Low</option>
+                </select>
+            </div>
+            <div class="form-group" style="align-self: flex-end;">
+                <button type="submit" style="padding: 10px 20px; background: #3498db; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <section class="properties-grid">
+        <div th:if="${properties.empty}" class="no-properties">
+            <p>No properties found matching your criteria.</p>
+        </div>
+
+        <div th:each="property : ${properties}" class="property-card">
+            <div class="property-image" th:style="${property.split(',').length > 8 and property.split(',')[8] != null and property.split(',')[8] != ''} ? 'background-image: url(' + ${property.split(',')[8]} + ')' : 'background-image: url(/default-property.jpg)'">
+                <span class="property-type" th:text="${property.split(',').length > 1 ? #strings.capitalize(property.split(',')[1]) : 'Unknown'}">Type</span>
+            </div>
+            <div class="property-details">
+                <h3 class="property-title" th:text="${property.split(',').length > 3 ? property.split(',')[3] : 'Untitled Property'}">Property Title</h3>
+                <p class="property-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span th:text="${property.split(',')[1].equalsIgnoreCase('land') ? (property.split(',').length > 7 ? property.split(',')[7] : 'Location not specified') : (property.split(',').length > 6 ? property.split(',')[6] : 'Location not specified')}">Location</span>
+                </p>
+                
+                <p class="property-price" th:if="${property.split(',').length > 1 and property.split(',')[1] != 'rent'}" 
+                   th:text="'Rs. ' + ${property.split(',')[5]}">Price</p>
+                
+                <p class="property-price" th:if="${property.split(',').length > 1 and property.split(',')[1] == 'rent'}" 
+                   th:text="'Rs. ' + ${property.split(',')[9]} + '/month'">Monthly Price</p>
+
+                <div class="property-specs">
+                    <th:block th:if="${property.split(',').length > 1 and property.split(',')[1] == 'house'}">
+                        <span>
+                            <i class="fas fa-ruler-combined"></i>
+                            <th:block th:text="${property.split(',')[4]} + ' sqft'">Square Footage</th:block>
+                        </span>
+                        <span>
+                            <i class="fas fa-bed"></i>
+                            <th:block th:text="${property.split(',')[9]} + ' bed'">Bedrooms</th:block>
+                        </span>
+                        <span>
+                            <i class="fas fa-bath"></i>
+                            <th:block th:text="${property.split(',')[10]} + ' bath'">Bathrooms</th:block>
+                        </span>
+                    </th:block>
+
+                    <th:block th:if="${property.split(',').length > 1 and property.split(',')[1] == 'apartment'}">
+                        <span>
+                            <i class="fas fa-ruler-combined"></i>
+                            <th:block th:text="${property.split(',')[4]} + ' sqft'">Square Footage</th:block>
+                        </span>
+                        <span>
+                            <i class="fas fa-building"></i>
+                            <th:block th:text="'Floor ' + ${property.split(',')[9]}">Floor Number</th:block>
+                        </span>
+                        <span>
+                            <i class="fas fa-door-open"></i>
+                            <th:block th:text="${property.split(',')[10]} + ' rooms'">Rooms</th:block>
+                        </span>
+                        <span th:if="${property.split(',')[11] == 'true'}">
+                            <i class="fas fa-elevator"></i>
+                            <th:block>Has Elevator</th:block>
+                        </span>
+                    </th:block>
+
+                    <th:block th:if="${property.split(',').length > 1 and property.split(',')[1] == 'land'}">
+                        <span>
+                            <i class="fas fa-ruler-combined"></i>
+                            <th:block th:text="${property.split(',')[4]} + ' sqft'">Square Footage</th:block>
+                        </span>
+                        <span th:if="${property.split(',')[9] == 'true'}">
+                            <i class="fas fa-plug"></i>
+                            <th:block>Has Utilities</th:block>
+                        </span>
+                        <span th:if="${property.split(',')[10] == 'true'}">
+                            <i class="fas fa-fence"></i>
+                            <th:block>Fenced</th:block>
+                        </span>
+                    </th:block>
+
+                    <th:block th:if="${property.split(',').length > 1 and property.split(',')[1] == 'rent'}">
+                        <span>
+                            <i class="fas fa-ruler-combined"></i>
+                            <th:block th:text="${property.split(',')[4]} + ' sqft'">Square Footage</th:block>
+                        </span>
+                        <span>
+                            <i class="fas fa-moon"></i>
+                            <th:block th:text="'Rs. ' + ${property.split(',')[10]} + '/night'">Nightly Price</th:block>
+                        </span>
+                        <span>
+                            <i class="fas fa-calendar"></i>
+                            <th:block th:text="'Min stay: ' + ${property.split(',')[11]} + ' days'">Minimum Stay</th:block>
+                        </span>
+                    </th:block>
+                </div>
+
+                <div class="property-actions">
+                    <form th:action="@{/cart/add/{id}(id=${property.split(',')[0]})}" method="post" style="display: inline;">
+                        <button type="submit" class="btn-add-cart"
+                                th:disabled="${session.cart != null and session.cart.containsProperty(property.split(',')[0])}">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span th:text="${session.cart != null and session.cart.containsProperty(property.split(',')[0]) ? 'In Cart' : 'Add to Cart'}">
+                                Add to Cart
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
