@@ -1,5 +1,11 @@
+package com.webpage.real_estate.utils;
+
+import com.webpage.real_estate.model.Property;
+
+import java.util.List;
+
 public class QuickSortProperties {
-    public static void quickSort(Property[] properties, int low, int high) {
+    public static void quickSort(List<String> properties, int low, int high) {
         if (low < high) {
             int pi = partition(properties, low, high);
             quickSort(properties, low, pi - 1);
@@ -7,11 +13,14 @@ public class QuickSortProperties {
         }
     }
 
-    private static int partition(Property[] properties, int low, int high) {
-        double pivot = properties[high].getPrice();
+    private static int partition(List<String> properties, int low, int high) {
+        String[] line = (properties.get(high)).split(",");
+        String[] newline;
+        double pivot = Double.parseDouble(line[1].equals("rent") ? line[9].trim() : line[5].trim());
         int i = low - 1;
         for (int j = low; j < high; j++) {
-            if (properties[j].getPrice() <= pivot) {
+            newline = (properties.get(j)).split(",");
+            if (Double.parseDouble(newline[1].equals("rent") ? newline[9].trim() : newline[5].trim()) <= pivot) {
                 i++;
                 swap(properties, i, j);
             }
@@ -20,30 +29,9 @@ public class QuickSortProperties {
         return i + 1;
     }
 
-    private static void swap(Property[] properties, int i, int j) {
-        Property temp = properties[i];
-        properties[i] = properties[j];
-        properties[j] = temp;
-    }
-
-    public static void main(String[] args) {
-        Property[] properties = {
-                new Property("H001", 350000.0, "456/2 Koswatte St."),
-                new Property("H002", 450000.0, "809/2 Pugoda St."),
-                new Property("H003", 350000.0, "10/7 Colombo St."),
-                new Property("H004", 550000.0, "105/3 Malabe St.")
-        };
-
-        System.out.println("Before sorting:");
-        for (Property p : properties) {
-            System.out.println(p);
-        }
-
-        quickSort(properties, 0, properties.length - 1);
-
-        System.out.println("\nAfter sorting by price:");
-        for (Property p : properties) {
-            System.out.println(p);
-        }
+    private static void swap(List<String> properties, int i, int j) {
+        String temp = properties.get(i);
+        properties.set(i, properties.get(j));
+        properties.set(j, String.valueOf(temp));
     }
 }
